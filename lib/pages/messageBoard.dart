@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
+import 'package:memory/utils/formateData.dart';
 import './../components/MessageCard.dart';
 import './../pages/addMessage.dart';
+import './../utils/http.dart';
 
 class MessageBoard extends StatefulWidget {
   @override
@@ -8,6 +10,20 @@ class MessageBoard extends StatefulWidget {
 }
 
 class _MessageBoardState extends State<MessageBoard> {
+  List<MessageDetail> messageList = [];
+  void initState() {
+    super.initState();
+    getMessage();
+  }
+
+  void getMessage() async {
+    final list = await getMessageList();
+    setState(() {
+      messageList = list;
+    });
+    print(list);
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -29,23 +45,7 @@ class _MessageBoardState extends State<MessageBoard> {
         ],
       ),
       body: new ListView(
-        children: [
-          messageCard(true, context),
-          messageCard(false, context),
-          messageCard(true, context),
-          messageCard(false, context),
-          messageCard(true, context),
-          messageCard(true, context),
-          messageCard(false, context),
-          messageCard(true, context),
-          messageCard(true, context),
-          messageCard(true, context),
-          messageCard(false, context),
-          messageCard(true, context),
-          messageCard(true, context),
-          messageCard(true, context),
-        ],
-      ),
+          children: messageList.map((e) => messageCard(e, context)).toList()),
     );
   }
 }

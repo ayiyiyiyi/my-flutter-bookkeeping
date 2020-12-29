@@ -1,3 +1,5 @@
+import 'dart:convert';
+
 import 'package:flutter/material.dart';
 import 'package:memory/components/Drawer.dart';
 import './../config.dart';
@@ -6,6 +8,12 @@ import './../pages/bookkeep.dart';
 
 import 'package:flutter_my_picker/flutter_my_picker.dart';
 import 'package:flutter_my_picker/common/date.dart';
+
+// import './../utils/http.dart';
+import 'package:dio/dio.dart';
+import './../utils/formateData.dart';
+
+var dio = Dio();
 
 class Home extends StatefulWidget {
   @override
@@ -16,6 +24,8 @@ class _HomeState extends State<Home> with SingleTickerProviderStateMixin {
   AnimationController _controller;
   DateTime date;
   String dateStr;
+  List<SpendDetail> spendList = [];
+  double dailyTotal = 0;
   // drawer
   final GlobalKey<ScaffoldState> _scaffoldKey = GlobalKey<ScaffoldState>();
 
@@ -27,6 +37,23 @@ class _HomeState extends State<Home> with SingleTickerProviderStateMixin {
     Navigator.of(context).pop();
   }
 
+  Future getDaySpend() async {
+    try {
+      Response response = await dio
+          .get('http://rap2api.taobao.org/app/mock/269346/tally/daliy/list');
+      // print(response);
+      setState(() {
+        dailyTotal = response.data['total'];
+        print(dailyTotal);
+        spendList = (response.data['list'] as List)
+            .map(((item) => SpendDetail.formJson(item)))
+            .toList();
+      });
+    } catch (e) {
+      print(e);
+    }
+  }
+
   @override
   void initState() {
     super.initState();
@@ -36,6 +63,7 @@ class _HomeState extends State<Home> with SingleTickerProviderStateMixin {
       dateStr = MyDate.format('yyyy-MM-dd', _date);
     });
     _controller = AnimationController(vsync: this);
+    getDaySpend();
   }
 
   @override
@@ -123,7 +151,8 @@ class _HomeState extends State<Home> with SingleTickerProviderStateMixin {
                               TextSpan(
                                   text: '¥ ', style: TextStyle(fontSize: 16)),
                               TextSpan(
-                                  text: '3000', style: TextStyle(fontSize: 30))
+                                  text: dailyTotal.toString(),
+                                  style: TextStyle(fontSize: 30))
                             ]),
                             textAlign: TextAlign.right),
                       ))
@@ -133,21 +162,8 @@ class _HomeState extends State<Home> with SingleTickerProviderStateMixin {
               padding: EdgeInsets.all(20.0),
               width: double.infinity,
               child: ListBody(
-                children: [
-                  spendCard(true, context),
-                  spendCard(false, context),
-                  spendCard(false, context),
-                  spendCard(true, context),
-                  spendCard(false, context),
-                  spendCard(false, context),
-                  spendCard(false, context),
-                  spendCard(false, context),
-                  spendCard(true, context),
-                  spendCard(false, context),
-                  spendCard(false, context),
-                  spendCard(false, context),
-                ],
-              ))
+                  children:
+                      spendList.map((e) => spendCard(e, context)).toList()))
         ],
       ),
     );

@@ -1,7 +1,8 @@
 import 'package:flutter/material.dart';
 import './../config.dart';
+import './../utils/formateData.dart';
 
-Widget statisticsCard(text, context) {
+Widget statisticsCard(SortDetail detail, context) {
   return new Container(
     padding: EdgeInsets.only(top: 10, bottom: 10, left: 20, right: 20),
     margin: EdgeInsets.only(bottom: 2),
@@ -15,7 +16,7 @@ Widget statisticsCard(text, context) {
             Container(
               width: double.infinity,
               child: Text(
-                text,
+                detail.type,
                 textAlign: TextAlign.left,
                 style: TextStyle(fontSize: 18, fontWeight: FontWeight.w400),
               ),
@@ -24,7 +25,7 @@ Widget statisticsCard(text, context) {
               padding: EdgeInsets.only(top: 6),
               width: double.infinity,
               child: Text(
-                '50%',
+                detail.percent.toString() + '%',
                 textAlign: TextAlign.left,
                 style: TextStyle(fontSize: 12, fontWeight: FontWeight.w400),
               ),
@@ -38,7 +39,7 @@ Widget statisticsCard(text, context) {
             child: LinearProgressIndicator(
           backgroundColor: Colors.grey[300],
           valueColor: AlwaysStoppedAnimation(Color.fromRGBO(245, 207, 39, 1)),
-          value: .8,
+          value: detail.percent / 100,
         )),
       ),
       Expanded(
@@ -47,7 +48,8 @@ Widget statisticsCard(text, context) {
             child: Column(children: [
               Container(
                   width: double.infinity,
-                  child: new Text('200',
+                  child: new Text(
+                      (detail.boyCost + detail.girlCost).toStringAsFixed(2),
                       textAlign: TextAlign.right,
                       style: TextStyle(
                         fontSize: 18,
@@ -57,7 +59,9 @@ Widget statisticsCard(text, context) {
               Container(
                   padding: EdgeInsets.only(top: 6),
                   width: double.infinity,
-                  child: new Text('12 笔',
+                  child: new Text(
+                      (detail.boyRecordNum + detail.girlRecordNum).toString() +
+                          '笔',
                       textAlign: TextAlign.right,
                       style: TextStyle(
                         fontSize: 12,

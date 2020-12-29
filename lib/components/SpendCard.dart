@@ -1,24 +1,14 @@
 import 'package:flutter/material.dart';
+import 'package:memory/utils/formateData.dart';
 import './../config.dart';
 
-Widget spendCard(color, context) {
+Widget spendCard(SpendDetail detail, context) {
   return new Container(
     padding: EdgeInsets.only(top: 6, bottom: 6, left: 20, right: 16),
     margin: EdgeInsets.only(bottom: 6),
     decoration: BoxDecoration(
       borderRadius: BorderRadius.circular(6),
-      color: color ? Global.girlBg : Global.boyBg,
-      // border: Border(
-      //     bottom: BorderSide(color: Colors.black54, width: 1),
-      //     top: BorderSide(color: Colors.black54, width: 1),
-      //     left: BorderSide(color: Colors.black54, width: 1),
-      //     right: BorderSide(color: Colors.black54, width: 1)),
-      // boxShadow: [
-      //   BoxShadow(
-      //     color: Colors.black54,
-      //     blurRadius: 2.0,
-      //   ),
-      // ]
+      color: detail.gender == 1 ? Global.girlBg : Global.boyBg,
     ),
     child: Flex(direction: Axis.horizontal, children: <Widget>[
       Expanded(
@@ -29,7 +19,7 @@ Widget spendCard(color, context) {
             Container(
               width: double.infinity,
               child: Text(
-                '晚餐',
+                detail.type,
                 textAlign: TextAlign.left,
                 style: TextStyle(fontSize: 18),
               ),
@@ -37,10 +27,10 @@ Widget spendCard(color, context) {
             Container(
                 padding: EdgeInsets.only(top: 2),
                 width: double.infinity,
-                child: Text('出去吃',
+                child: Text(detail.note,
                     textAlign: TextAlign.left,
                     style: TextStyle(
-                      fontSize: 12,
+                      fontSize: 14,
                       color: Global.greyColor,
                       fontWeight: FontWeight.w200,
                     )))
@@ -50,7 +40,7 @@ Widget spendCard(color, context) {
       Expanded(
           flex: 1,
           child: Container(
-              child: new Text('20',
+              child: new Text(detail.cost.toString(),
                   textAlign: TextAlign.right,
                   style: TextStyle(
                     fontSize: 20,

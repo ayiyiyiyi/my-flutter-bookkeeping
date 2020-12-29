@@ -1,7 +1,8 @@
 import 'package:flutter/material.dart';
+import 'package:memory/utils/formateData.dart';
 import './../config.dart';
 
-Widget messageCard(color, context) {
+Widget messageCard(MessageDetail detail, context) {
   return new Container(
       padding: EdgeInsets.only(top: 16, bottom: 12, left: 16, right: 16),
       margin: EdgeInsets.only(top: 0, bottom: 2, left: 8, right: 8),
@@ -11,7 +12,7 @@ Widget messageCard(color, context) {
           Container(
             width: double.infinity,
             child: Text(
-              '这里可以写碎碎念~这里可以写碎碎念~这里可以写碎碎念~这里可以写碎碎念~这里可以写碎碎念~这里可以写碎碎念~这里可以写碎碎念~这里可以写碎碎念~这里可以写碎碎念~这里可以写碎碎念~这里可以写碎碎念~这里可以写碎碎念~这里可以写碎碎念~这里可以写碎碎念~这里可以写碎碎念~这里可以写碎碎念~这里可以写碎碎念~',
+              detail.content,
               textAlign: TextAlign.left,
               style: TextStyle(fontSize: 16),
             ),
@@ -21,14 +22,15 @@ Widget messageCard(color, context) {
               width: double.infinity,
               child: Text.rich(TextSpan(children: [
                 TextSpan(
-                    text: color ? '阿翊   ' : '阿翊   ',
+                    text: detail.name + '    ',
                     style: TextStyle(
                       fontSize: 14,
-                      color: color ? Global.girlText : Global.boyText,
+                      color:
+                          detail.gender == 1 ? Global.girlText : Global.boyText,
                       fontWeight: FontWeight.w400,
                     )),
                 TextSpan(
-                    text: '2020-10-30 18:00:01',
+                    text: detail.time.toString(),
                     style: TextStyle(
                       fontSize: 14,
                       color: Global.greyColor,

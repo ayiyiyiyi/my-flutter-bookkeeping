@@ -1,10 +1,13 @@
 import 'package:flutter/material.dart';
+import 'package:memory/utils/formateData.dart';
 import './../config.dart';
 import './../components/StatisticsCard.dart';
 import './yearStatistics.dart';
 
 import 'package:flutter_my_picker/flutter_my_picker.dart';
 import 'package:flutter_my_picker/common/date.dart';
+
+import './../utils/http.dart';
 
 class Statistics extends StatefulWidget {
   @override
@@ -14,6 +17,8 @@ class Statistics extends StatefulWidget {
 class _StatisticsState extends State<Statistics> {
   DateTime date;
   String dateStr;
+  List<SortDetail> monthList = [];
+  double monthTotal = 0;
   @override
   void initState() {
     super.initState();
@@ -22,6 +27,7 @@ class _StatisticsState extends State<Statistics> {
       date = _date;
       dateStr = MyDate.format('yyyy-MM', _date);
     });
+    getMonthCostData();
   }
 
   _change(formatString) {
@@ -31,6 +37,14 @@ class _StatisticsState extends State<Statistics> {
         dateStr = MyDate.format(formatString, _date);
       });
     };
+  }
+
+  void getMonthCostData() async {
+    var _monthCost = await getMonthCost();
+    setState(() {
+      monthList = _monthCost.list;
+      monthTotal = _monthCost.total;
+    });
   }
 
   Widget build(BuildContext context) {
@@ -95,7 +109,7 @@ class _StatisticsState extends State<Statistics> {
                                   fontSize: 16,
                                   color: Color.fromRGBO(245, 207, 39, 1))),
                           TextSpan(
-                              text: '3000',
+                              text: monthTotal.toString(),
                               style: TextStyle(
                                   fontSize: 32,
                                   fontWeight: FontWeight.w600,
@@ -105,21 +119,9 @@ class _StatisticsState extends State<Statistics> {
                   )
                 ],
               )),
-          statisticsCard('餐饮', context),
-          statisticsCard('娱乐', context),
-          statisticsCard('交通', context),
-          statisticsCard('通讯', context),
-          statisticsCard('购物', context),
-          statisticsCard('医疗', context),
-          statisticsCard('宠物', context),
-          statisticsCard('通讯', context),
-          statisticsCard('购物', context),
-          statisticsCard('医疗', context),
-          statisticsCard('宠物', context),
-          statisticsCard('通讯', context),
-          statisticsCard('购物', context),
-          statisticsCard('医疗', context),
-          statisticsCard('宠物', context),
+          ListBody(
+            children: monthList.map((e) => statisticsCard(e, context)).toList(),
+          )
         ],
       ),
     );
