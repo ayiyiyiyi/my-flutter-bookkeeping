@@ -18,7 +18,7 @@ class _StatisticsState extends State<Statistics> {
   DateTime date;
   String dateStr;
   List<SortDetail> monthList = [];
-  double monthTotal = 0;
+  int monthTotal = 0;
   @override
   void initState() {
     super.initState();

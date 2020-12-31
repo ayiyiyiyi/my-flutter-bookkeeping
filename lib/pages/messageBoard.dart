@@ -21,7 +21,6 @@ class _MessageBoardState extends State<MessageBoard> {
     setState(() {
       messageList = list;
     });
-    print(list);
   }
 
   @override

@@ -25,7 +25,7 @@ class _HomeState extends State<Home> with SingleTickerProviderStateMixin {
   DateTime date;
   String dateStr;
   List<SpendDetail> spendList = [];
-  double dailyTotal = 0;
+  int dailyTotal = 0;
   // drawer
   final GlobalKey<ScaffoldState> _scaffoldKey = GlobalKey<ScaffoldState>();
 
@@ -44,7 +44,6 @@ class _HomeState extends State<Home> with SingleTickerProviderStateMixin {
       // print(response);
       setState(() {
         dailyTotal = response.data['total'];
-        print(dailyTotal);
         spendList = (response.data['list'] as List)
             .map(((item) => SpendDetail.formJson(item)))
             .toList();

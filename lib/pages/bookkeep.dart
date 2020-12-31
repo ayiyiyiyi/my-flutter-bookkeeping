@@ -176,7 +176,7 @@ class _BookkeepState extends State<Bookkeep> {
                     style: TextStyle(fontSize: 36),
                     textAlign: TextAlign.right,
                     decoration: InputDecoration(
-                        hintText: "0.00", border: InputBorder.none),
+                        hintText: "0", border: InputBorder.none),
                     cursorColor: Colors.grey),
               ),
               Container(

@@ -48,8 +48,7 @@ Widget statisticsCard(SortDetail detail, context) {
             child: Column(children: [
               Container(
                   width: double.infinity,
-                  child: new Text(
-                      (detail.boyCost + detail.girlCost).toStringAsFixed(2),
+                  child: new Text((detail.boyCost + detail.girlCost).toString(),
                       textAlign: TextAlign.right,
                       style: TextStyle(
                         fontSize: 18,

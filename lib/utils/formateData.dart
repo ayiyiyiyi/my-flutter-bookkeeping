@@ -4,7 +4,7 @@ class SpendDetail {
   String type;
   String note;
   int time;
-  double cost;
+  int cost;
   String name;
   int id;
   SpendDetail(
@@ -30,7 +30,7 @@ class SpendDetail {
 
 class MonthCost {
   List<SortDetail> list;
-  double total;
+  int total;
   MonthCost({this.list, this.total});
   factory MonthCost.formJson(Map<String, dynamic> json) {
     List list = json['list'] as List;
@@ -42,11 +42,11 @@ class MonthCost {
 class SortDetail {
   int id;
   String type;
-  double percent;
+  int percent;
   int boyRecordNum;
   int girlRecordNum;
-  double boyCost;
-  double girlCost;
+  int boyCost;
+  int girlCost;
   SortDetail(
       {this.id,
       this.type,
@@ -79,5 +79,25 @@ class MessageDetail {
         gender: json['gender'],
         name: json['name'],
         time: json['time']);
+  }
+}
+
+class YearDetail {
+  int total;
+  List<MonthTotal> list;
+  YearDetail({this.total, this.list});
+  factory YearDetail.formJson(Map<String, dynamic> json) {
+    List list = json['list'] as List;
+    List<MonthTotal> _list = list.map((e) => MonthTotal.formJson(e)).toList();
+    return YearDetail(total: json['total'], list: _list);
+  }
+}
+
+class MonthTotal {
+  int month;
+  int total;
+  MonthTotal({this.total, this.month});
+  factory MonthTotal.formJson(Map<String, dynamic> json) {
+    return MonthTotal(month: json['month'], total: json['total']);
   }
 }

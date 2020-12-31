@@ -2,6 +2,8 @@ import 'package:flutter/material.dart';
 import 'package:memory/utils/formateData.dart';
 import './../config.dart';
 
+import 'package:flutter_my_picker/common/date.dart';
+
 Widget messageCard(MessageDetail detail, context) {
   return new Container(
       padding: EdgeInsets.only(top: 16, bottom: 12, left: 16, right: 16),
@@ -30,7 +32,8 @@ Widget messageCard(MessageDetail detail, context) {
                       fontWeight: FontWeight.w400,
                     )),
                 TextSpan(
-                    text: detail.time.toString(),
+                    text: MyDate.format('yyyy/MM/dd HH:mm:ss',
+                        DateTime.fromMillisecondsSinceEpoch(detail.time)),
                     style: TextStyle(
                       fontSize: 14,
                       color: Global.greyColor,

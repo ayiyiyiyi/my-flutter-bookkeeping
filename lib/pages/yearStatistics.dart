@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
 import './../config.dart';
 import './../components/StatisticsCard.dart';
+import './../utils/http.dart';
+import './../utils/formateData.dart';
 
 class YearStatistics extends StatefulWidget {
   @override
@@ -8,6 +10,20 @@ class YearStatistics extends StatefulWidget {
 }
 
 class _YearStatisticsState extends State<YearStatistics> {
+  List<YearDetail> yearList = [];
+  void initState() {
+    super.initState();
+    getYearData();
+  }
+
+  void getYearData() async {
+    final _list = await getYearList();
+    print(_list);
+    setState(() {
+      yearList = _list;
+    });
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(

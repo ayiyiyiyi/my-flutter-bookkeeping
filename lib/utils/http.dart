@@ -13,6 +13,17 @@ Future<MonthCost> getMonthCost() async {
   }
 }
 
+Future<List<YearDetail>> getYearList() async {
+  try {
+    Response response = await dio
+        .get('http://rap2api.taobao.org/app/mock/269346/tally/year/list');
+    return (response.data as List).map((e) => YearDetail.formJson(e)).toList();
+  } catch (e) {
+    print(e);
+    return [];
+  }
+}
+
 Future<List<MessageDetail>> getMessageList() async {
   try {
     Response response = await dio
