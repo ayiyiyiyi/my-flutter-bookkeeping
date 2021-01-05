@@ -22,16 +22,13 @@ class HomeDrawer extends StatelessWidget {
             ),
           ),
           ListTile(
-            title: Text('修改昵称'),
+            title: Text('pull'),
           ),
           ListTile(
-            title: Text('倒数日'),
+            title: Text('push'),
           ),
           ListTile(
-            title: Text('关于'),
-          ),
-          ListTile(
-            title: Text('版本号'),
+            title: Text('version 0.0.1'),
           ),
         ],
       )),

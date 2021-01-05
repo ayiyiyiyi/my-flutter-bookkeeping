@@ -84,20 +84,21 @@ class MessageDetail {
 
 class YearDetail {
   int total;
+  String year;
   List<MonthTotal> list;
-  YearDetail({this.total, this.list});
+  YearDetail({this.total, this.year, this.list});
   factory YearDetail.formJson(Map<String, dynamic> json) {
     List list = json['list'] as List;
     List<MonthTotal> _list = list.map((e) => MonthTotal.formJson(e)).toList();
-    return YearDetail(total: json['total'], list: _list);
+    return YearDetail(total: json['total'], year: json['year'], list: _list);
   }
 }
 
 class MonthTotal {
   int month;
-  int total;
-  MonthTotal({this.total, this.month});
+  int cost;
+  MonthTotal({this.cost, this.month});
   factory MonthTotal.formJson(Map<String, dynamic> json) {
-    return MonthTotal(month: json['month'], total: json['total']);
+    return MonthTotal(month: json['month'], cost: json['cost']);
   }
 }
