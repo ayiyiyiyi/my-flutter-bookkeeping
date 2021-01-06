@@ -12,6 +12,7 @@ import 'package:flutter_my_picker/common/date.dart';
 // import './../utils/http.dart';
 import 'package:dio/dio.dart';
 import './../utils/formateData.dart';
+import './../utils/common.dart';
 
 var dio = Dio();
 
@@ -63,6 +64,12 @@ class _HomeState extends State<Home> with SingleTickerProviderStateMixin {
     });
     _controller = AnimationController(vsync: this);
     getDaySpend();
+    getLocalCostFile();
+  }
+
+  void getLocalCostFile() async {
+    final res = await readCost();
+    print(res);
   }
 
   @override

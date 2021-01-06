@@ -4,6 +4,10 @@ import './../config.dart';
 import 'package:flutter_my_picker/flutter_my_picker.dart';
 import 'package:flutter_my_picker/common/date.dart';
 
+import './../utils/common.dart';
+
+import 'dart:convert';
+
 class Bookkeep extends StatefulWidget {
   @override
   _BookkeepState createState() => _BookkeepState();
@@ -12,6 +16,27 @@ class Bookkeep extends StatefulWidget {
 class _BookkeepState extends State<Bookkeep> {
   DateTime date;
   String dateStr;
+  String cost;
+  String note = '';
+  List<String> typeList = [
+    '三餐',
+    '房租',
+    '买菜',
+    '生活缴费',
+    '宵夜',
+    '零食',
+    '交通',
+    '通讯',
+    '家居日用',
+    '娱乐',
+    '宠物',
+    '医疗',
+    '服装',
+    '护肤美妆',
+    '其他'
+  ];
+  String type = '';
+
   @override
   void initState() {
     super.initState();
@@ -22,7 +47,8 @@ class _BookkeepState extends State<Bookkeep> {
     });
   }
 
-  _change(formatString) {
+  // 选择日期
+  _changeDate(formatString) {
     return (_date) {
       setState(() {
         date = _date;
@@ -31,107 +57,72 @@ class _BookkeepState extends State<Bookkeep> {
     };
   }
 
+  _writeCostTolocalFile() async {
+    List data;
+    final res = await readCost();
+    if (res.isNotEmpty) {
+      data = jsonDecode(res);
+    } else {
+      data = [];
+    }
+    print(dateStr);
+    var index = data.indexWhere((item) => item.date == dateStr);
+    var gender = 1;
+    var name = '阿翊';
+
+    if (index >= 0) {
+      data[index].list.add({
+        "type": type,
+        "note": note,
+        "cost": cost,
+        "gender": gender,
+        "name": name
+      });
+    } else {
+      data.add({
+        "date": dateStr,
+        "list": [
+          {
+            "type": type,
+            "note": note,
+            "cost": cost,
+            "gender": gender,
+            "name": name
+          }
+        ]
+      });
+    }
+    var jsonStr = jsonEncode(data);
+    await writeCost(jsonStr);
+    Navigator.pop(context);
+  }
+
   void _settingModalBottomSheet(context) {
     showModalBottomSheet(
         context: context,
         builder: (context) {
           return Container(
               height: 350,
+              padding: EdgeInsets.only(top: 15),
               child: new ListView(
-                children: <Widget>[
-                  new ListTile(
-                    title: new Container(
-                      child: new Text(
-                        "餐饮",
-                        textAlign: TextAlign.center,
-                      ),
-                      width: double.infinity,
-                    ),
-                    selected: true,
-                    onTap: () async {},
-                  ),
-                  new ListTile(
-                    title: new Container(
-                      child: new Text(
-                        "餐饮",
-                        textAlign: TextAlign.center,
-                      ),
-                      width: double.infinity,
-                    ),
-                    onTap: () async {},
-                  ),
-                  new ListTile(
-                    title: new Container(
-                      child: new Text(
-                        "餐饮",
-                        textAlign: TextAlign.center,
-                      ),
-                      width: double.infinity,
-                    ),
-                    onTap: () async {},
-                  ),
-                  new ListTile(
-                    title: new Container(
-                      child: new Text(
-                        "餐饮",
-                        textAlign: TextAlign.center,
-                      ),
-                      width: double.infinity,
-                    ),
-                    onTap: () async {},
-                  ),
-                  new ListTile(
-                    title: new Container(
-                      child: new Text(
-                        "餐饮",
-                        textAlign: TextAlign.center,
-                      ),
-                      width: double.infinity,
-                    ),
-                    onTap: () async {},
-                  ),
-                  new ListTile(
-                    title: new Container(
-                      child: new Text(
-                        "餐饮",
-                        textAlign: TextAlign.center,
-                      ),
-                      width: double.infinity,
-                    ),
-                    onTap: () async {},
-                  ),
-                  new ListTile(
-                    title: new Container(
-                      child: new Text(
-                        "餐饮",
-                        textAlign: TextAlign.center,
-                      ),
-                      width: double.infinity,
-                    ),
-                    onTap: () async {},
-                  ),
-                  new ListTile(
-                    title: new Container(
-                      child: new Text(
-                        "餐饮",
-                        textAlign: TextAlign.center,
-                      ),
-                      width: double.infinity,
-                    ),
-                    onTap: () async {},
-                  ),
-                  new ListTile(
-                    title: new Container(
-                      child: new Text(
-                        "餐饮",
-                        textAlign: TextAlign.center,
-                      ),
-                      width: double.infinity,
-                    ),
-                    onTap: () async {},
-                  ),
-                ],
-              ));
+                  children: typeList
+                      .map((e) => new ListTile(
+                            title: new Container(
+                              child: new Text(
+                                e,
+                                textAlign: TextAlign.center,
+                              ),
+                              width: double.infinity,
+                            ),
+                            selected: e == type,
+                            onTap: () {
+                              setState(() {
+                                type = e;
+                              });
+                              Navigator.pop(context);
+                            },
+                          ))
+                      .toList()));
         });
   }
 
@@ -145,7 +136,11 @@ class _BookkeepState extends State<Bookkeep> {
           IconButton(
               icon: Icon(Icons.check, color: Colors.black),
               iconSize: 24,
-              onPressed: () {}),
+              onPressed: () async {
+                if (cost == null) return;
+                if (type == '') return;
+                _writeCostTolocalFile();
+              }),
         ],
         leading: Builder(builder: (context) {
           return IconButton(
@@ -171,6 +166,11 @@ class _BookkeepState extends State<Bookkeep> {
                             BorderSide(color: Global.borderColor, width: 1))),
                 margin: EdgeInsets.only(top: 20, left: 20, right: 20),
                 child: TextField(
+                    onChanged: (String value) {
+                      setState(() {
+                        cost = value;
+                      });
+                    },
                     keyboardType: TextInputType.number,
                     autofocus: true,
                     style: TextStyle(fontSize: 36),
@@ -209,7 +209,7 @@ class _BookkeepState extends State<Bookkeep> {
                           child: Container(
                             width: double.infinity,
                             child: Text(
-                              '餐饮',
+                              type,
                               textAlign: TextAlign.right,
                               style: TextStyle(fontSize: 16),
                             ),
@@ -237,7 +237,7 @@ class _BookkeepState extends State<Bookkeep> {
                         isShowHeader: true,
                         start: '2020-01-01',
                         end: MyDate.getNow(),
-                        onConfirm: _change('yyyy-MM-dd'),
+                        onConfirm: _changeDate('yyyy-MM-dd'),
                         squeeze: 1.45,
                         color: Colors.black,
                         magnification: 1,
@@ -250,7 +250,7 @@ class _BookkeepState extends State<Bookkeep> {
                           flex: 1,
                           child: Container(
                             child: Text(
-                              '时间',
+                              '日期',
                               textAlign: TextAlign.left,
                               style: TextStyle(
                                   fontSize: 16, color: Global.greyColor),
@@ -283,11 +283,16 @@ class _BookkeepState extends State<Bookkeep> {
                 margin: EdgeInsets.only(top: 10, left: 20, right: 20),
                 child: TextField(
                     maxLines: 3,
+                    onChanged: (String value) {
+                      setState(() {
+                        note = value;
+                      });
+                    },
                     keyboardType: TextInputType.multiline,
                     style: TextStyle(fontSize: 16),
                     textAlign: TextAlign.right,
                     decoration: InputDecoration(
-                        hintText: "有什么要备注的在这里写下吧~", border: InputBorder.none),
+                        hintText: "有什么要备注的写在这里吧~", border: InputBorder.none),
                     cursorColor: Colors.grey),
               ),
             ],
