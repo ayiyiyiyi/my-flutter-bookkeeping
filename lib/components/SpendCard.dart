@@ -28,17 +28,18 @@ Widget spendCard(SpendDetail detail, context) {
                     style: TextStyle(fontSize: 18),
                   ),
                 ),
-                Container(
-                    height: detail.note == null || detail.note == '' ? 0 : 22,
-                    padding: EdgeInsets.only(top: 2),
-                    width: double.infinity,
-                    child: Text(detail.note,
-                        textAlign: TextAlign.left,
-                        style: TextStyle(
-                          fontSize: 16,
-                          color: Global.greyColor,
-                          fontWeight: FontWeight.w200,
-                        )))
+                Offstage(
+                    offstage: detail.note == null || detail.note == '',
+                    child: Container(
+                        padding: EdgeInsets.only(top: 2),
+                        width: double.infinity,
+                        child: Text(detail.note,
+                            textAlign: TextAlign.left,
+                            style: TextStyle(
+                              fontSize: 14,
+                              color: Global.greyColor,
+                              fontWeight: FontWeight.w300,
+                            ))))
               ],
             )),
           ),

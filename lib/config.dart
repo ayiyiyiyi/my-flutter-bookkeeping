@@ -3,7 +3,7 @@ import 'package:flutter/material.dart';
 class Global {
   static Color textColor = Colors.black;
   static Color appBarBg = Colors.white;
-  static Color greyColor = Color.fromRGBO(114, 114, 114, 1);
+  static Color greyColor = Color.fromRGBO(100, 100, 100, 1);
   static Color bgColor = Color.fromRGBO(248, 249, 248, 1);
   static Color borderColor = Color.fromRGBO(235, 237, 240, 1);
   static Color boyBg = Color.fromRGBO(173, 207, 214, 0.1);
