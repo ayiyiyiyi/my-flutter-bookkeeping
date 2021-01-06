@@ -65,36 +65,29 @@ class _BookkeepState extends State<Bookkeep> {
     } else {
       data = [];
     }
-    print(dateStr);
-    var index = data.indexWhere((item) => item.date == dateStr);
+    var index = data.indexWhere((item) => item['date'] == dateStr);
     var gender = 1;
     var name = '阿翊';
-
+    final val = {
+      "id": null,
+      "type": type,
+      "note": note,
+      "cost": int.parse(cost),
+      "gender": gender,
+      "name": name,
+      "date": dateStr
+    };
     if (index >= 0) {
-      data[index].list.add({
-        "type": type,
-        "note": note,
-        "cost": cost,
-        "gender": gender,
-        "name": name
-      });
+      data[index]['list'].insert(0, val);
     } else {
       data.add({
         "date": dateStr,
-        "list": [
-          {
-            "type": type,
-            "note": note,
-            "cost": cost,
-            "gender": gender,
-            "name": name
-          }
-        ]
+        "list": [val]
       });
     }
     var jsonStr = jsonEncode(data);
     await writeCost(jsonStr);
-    Navigator.pop(context);
+    Navigator.of(context).pop(true);
   }
 
   void _settingModalBottomSheet(context) {

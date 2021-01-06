@@ -10,7 +10,7 @@ Future<String> get _localPath async {
 
 Future<File> get _localCostFile async {
   final path = await _localPath;
-  return File('$path/dailyCost1.txt');
+  return File('$path/dailyCosts.txt');
 }
 
 Future writeCost(String data) async {

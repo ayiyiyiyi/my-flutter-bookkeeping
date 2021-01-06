@@ -8,7 +8,7 @@ Widget spendCard(SpendDetail detail, context) {
       onDismissed: (direction) {},
       direction: DismissDirection.endToStart,
       child: new Container(
-        padding: EdgeInsets.only(top: 6, bottom: 6, left: 20, right: 16),
+        padding: EdgeInsets.only(top: 8, bottom: 8, left: 20, right: 16),
         margin: EdgeInsets.only(bottom: 6),
         decoration: BoxDecoration(
           borderRadius: BorderRadius.circular(6),
@@ -29,12 +29,13 @@ Widget spendCard(SpendDetail detail, context) {
                   ),
                 ),
                 Container(
+                    height: detail.note == null || detail.note == '' ? 0 : 22,
                     padding: EdgeInsets.only(top: 2),
                     width: double.infinity,
                     child: Text(detail.note,
                         textAlign: TextAlign.left,
                         style: TextStyle(
-                          fontSize: 14,
+                          fontSize: 16,
                           color: Global.greyColor,
                           fontWeight: FontWeight.w200,
                         )))

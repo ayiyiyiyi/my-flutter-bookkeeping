@@ -17,6 +17,8 @@ import './../utils/common.dart';
 var dio = Dio();
 
 class Home extends StatefulWidget {
+  final arguments;
+  Home({this.arguments});
   @override
   _HomeState createState() => _HomeState();
 }
@@ -38,22 +40,6 @@ class _HomeState extends State<Home> with SingleTickerProviderStateMixin {
     Navigator.of(context).pop();
   }
 
-  Future getDaySpend() async {
-    try {
-      Response response = await dio
-          .get('http://rap2api.taobao.org/app/mock/269346/tally/daliy/list');
-      // print(response);
-      setState(() {
-        dailyTotal = response.data['total'];
-        spendList = (response.data['list'] as List)
-            .map(((item) => SpendDetail.formJson(item)))
-            .toList();
-      });
-    } catch (e) {
-      print(e);
-    }
-  }
-
   @override
   void initState() {
     super.initState();
@@ -63,13 +49,28 @@ class _HomeState extends State<Home> with SingleTickerProviderStateMixin {
       dateStr = MyDate.format('yyyy-MM-dd', _date);
     });
     _controller = AnimationController(vsync: this);
-    getDaySpend();
     getLocalCostFile();
   }
 
   void getLocalCostFile() async {
     final res = await readCost();
-    print(res);
+    if (res.isNotEmpty) {
+      var list = jsonDecode(res).toList();
+      int count = 0;
+      list.forEach((item) => {
+            if (item['date'] == dateStr)
+              {
+                setState(() {
+                  spendList = (item['list'] as List)
+                      .map((e) => SpendDetail.formJson(e))
+                      .toList();
+                  spendList.forEach((item) => {count = item.cost + count});
+                  dailyTotal = count;
+                })
+              }
+          });
+      print(spendList);
+    }
   }
 
   @override
@@ -123,10 +124,14 @@ class _HomeState extends State<Home> with SingleTickerProviderStateMixin {
           IconButton(
               icon: Icon(Icons.add_circle_outline_rounded,
                   color: Global.textColor),
-              onPressed: () {
-                Navigator.push(context, MaterialPageRoute(builder: (context) {
+              onPressed: () async {
+                bool args = await Navigator.push(context,
+                    MaterialPageRoute(builder: (context) {
                   return Bookkeep();
                 }));
+                if (args) {
+                  getLocalCostFile();
+                }
               }),
         ],
         backgroundColor: Global.bgColor,
