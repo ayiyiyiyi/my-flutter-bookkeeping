@@ -54,22 +54,34 @@ class _HomeState extends State<Home> with SingleTickerProviderStateMixin {
 
   void getLocalCostFile() async {
     final res = await readCost();
+    // print(res);
     if (res.isNotEmpty) {
       var list = jsonDecode(res).toList();
       int count = 0;
-      list.forEach((item) => {
-            if (item['date'] == dateStr)
-              {
-                setState(() {
-                  spendList = (item['list'] as List)
-                      .map((e) => SpendDetail.formJson(e))
-                      .toList();
-                  spendList.forEach((item) => {count = item.cost + count});
-                  dailyTotal = count;
-                })
-              }
-          });
-      print(spendList);
+      final data =
+          list.firstWhere((item) => item['date'] == dateStr, orElse: () {
+        return null;
+      });
+      print(data);
+      if (data != null) {
+        setState(() {
+          spendList = (data['list'] as List)
+              .map((e) => SpendDetail.formJson(e))
+              .toList();
+          spendList.forEach((item) => {count = item.cost + count});
+          dailyTotal = count;
+        });
+      } else {
+        setState(() {
+          dailyTotal = count;
+          spendList = [];
+        });
+        print(spendList);
+      }
+    } else {
+      setState(() {
+        spendList = [];
+      });
     }
   }
 
@@ -85,6 +97,7 @@ class _HomeState extends State<Home> with SingleTickerProviderStateMixin {
         date = _date;
         dateStr = MyDate.format(formatString, _date);
       });
+      getLocalCostFile();
     };
   }
 
@@ -172,7 +185,7 @@ class _HomeState extends State<Home> with SingleTickerProviderStateMixin {
           Container(
               padding: EdgeInsets.all(20.0),
               width: double.infinity,
-              child: ListBody(
+              child: new ListBody(
                   children:
                       spendList.map((e) => spendCard(e, context)).toList()))
         ],
