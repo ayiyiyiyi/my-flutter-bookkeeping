@@ -53,7 +53,7 @@ class _HomeState extends State<Home> with SingleTickerProviderStateMixin {
   }
 
   void getLocalCostFile() async {
-    final res = await readCost();
+    final res = await readLocalCost();
     // print(res);
     if (res.isNotEmpty) {
       var list = jsonDecode(res).toList();
@@ -142,7 +142,7 @@ class _HomeState extends State<Home> with SingleTickerProviderStateMixin {
                     MaterialPageRoute(builder: (context) {
                   return Bookkeep();
                 }));
-                if (args != null) {
+                if (args == true) {
                   getLocalCostFile();
                 }
               }),

@@ -57,9 +57,9 @@ class _BookkeepState extends State<Bookkeep> {
     };
   }
 
-  _writeCostTolocalFile() async {
+  _writeLocalCostTolocalFile() async {
     List data;
-    final res = await readCost();
+    final res = await readLocalCost();
     if (res.isNotEmpty) {
       data = jsonDecode(res);
     } else {
@@ -86,7 +86,7 @@ class _BookkeepState extends State<Bookkeep> {
       });
     }
     var jsonStr = jsonEncode(data);
-    await writeCost(jsonStr);
+    await writeLocalCost(jsonStr);
     Navigator.of(context).pop(true);
   }
 
@@ -132,7 +132,7 @@ class _BookkeepState extends State<Bookkeep> {
               onPressed: () async {
                 if (cost == null) return;
                 if (type == '') return;
-                _writeCostTolocalFile();
+                _writeLocalCostTolocalFile();
               }),
         ],
         leading: Builder(builder: (context) {

@@ -13,16 +13,40 @@ Future<File> get _localCostFile async {
   return File('$path/dailyCosts.json');
 }
 
-Future writeCost(String data) async {
+Future writeLocalCost(String data) async {
   final file = await _localCostFile;
 
   // Write the file.
   return file.writeAsString('$data');
 }
 
-Future readCost() async {
+Future readLocalCost() async {
   try {
     final file = await _localCostFile;
+
+    // Read the file.
+    String result = await file.readAsString();
+    return result;
+  } catch (e) {
+    return '';
+  }
+}
+
+Future<File> get _localMessageFile async {
+  final path = await _localPath;
+  return File('$path/loveMessage.json');
+}
+
+Future writeLocalMesage(String data) async {
+  final file = await _localMessageFile;
+
+  // Write the file.
+  return file.writeAsString('$data');
+}
+
+Future readLocalMessage() async {
+  try {
+    final file = await _localMessageFile;
 
     // Read the file.
     String result = await file.readAsString();

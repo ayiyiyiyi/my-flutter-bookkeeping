@@ -1,5 +1,9 @@
 import 'package:flutter/material.dart';
+import 'dart:convert';
+
 import 'package:memory/utils/formateData.dart';
+import './../utils/common.dart';
+
 import './../components/MessageCard.dart';
 import './../pages/addMessage.dart';
 import './../utils/http.dart';
@@ -13,7 +17,7 @@ class _MessageBoardState extends State<MessageBoard> {
   List<MessageDetail> messageList = [];
   void initState() {
     super.initState();
-    getMessage();
+    getLocalMesage();
   }
 
   void getMessage() async {
@@ -21,6 +25,17 @@ class _MessageBoardState extends State<MessageBoard> {
     setState(() {
       messageList = list;
     });
+  }
+
+  void getLocalMesage() async {
+    final res = await readLocalMessage();
+    print(res);
+    if (res.isNotEmpty) {
+      List list = jsonDecode(res).toList();
+      setState(() {
+        messageList = list.map((e) => MessageDetail.formJson(e)).toList();
+      });
+    }
   }
 
   @override
@@ -36,10 +51,14 @@ class _MessageBoardState extends State<MessageBoard> {
           IconButton(
               icon: Icon(Icons.edit_rounded, color: Colors.black),
               iconSize: 15,
-              onPressed: () {
-                Navigator.push(context, MaterialPageRoute(builder: (context) {
+              onPressed: () async {
+                bool args = await Navigator.push(context,
+                    MaterialPageRoute(builder: (context) {
                   return AddMessage();
                 }));
+                if (args == true) {
+                  getLocalMesage();
+                }
               }),
         ],
       ),
