@@ -96,8 +96,8 @@ class _HomeState extends State<Home> with SingleTickerProviderStateMixin {
       setState(() {
         date = _date;
         dateStr = MyDate.format(formatString, _date);
+        getLocalCostFile();
       });
-      getLocalCostFile();
     };
   }
 
@@ -142,7 +142,7 @@ class _HomeState extends State<Home> with SingleTickerProviderStateMixin {
                     MaterialPageRoute(builder: (context) {
                   return Bookkeep();
                 }));
-                if (args) {
+                if (args != null) {
                   getLocalCostFile();
                 }
               }),

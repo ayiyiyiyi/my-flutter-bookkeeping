@@ -75,7 +75,7 @@ class _BookkeepState extends State<Bookkeep> {
       "cost": int.parse(cost),
       "gender": gender,
       "name": name,
-      "date": dateStr
+      "time": date.millisecondsSinceEpoch
     };
     if (index >= 0) {
       data[index]['list'].insert(0, val);
